@@ -1,0 +1,15 @@
+batch_size: 8
+data_path: data/wolf
+device: cuda
+guidance_scale: 7.5
+latents_path: save
+n_frames: 40
+n_inversion_steps: 100
+n_timesteps: 50
+negative_prompt: ugly, blurry, low res, unrealistic, unaesthetic
+output_path: tokenflow-results_sdedit/wolf/a shiny silver robotic wolf/batch_size_8/50start_0.9
+prompt: a shiny silver robotic wolf
+sd_version: '2.1'
+seed: 1
+start: 0.9
+use_ddim_noise: true
