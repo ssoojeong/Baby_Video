@@ -13,3 +13,4 @@ torchvision==0.14.1
 tqdm==4.65.0
 transformers==4.27.1
 xformers==0.0.16
+

@@ -68,7 +68,7 @@ def get_args():
     parser.add_argument("--prompt", type=str, required=True, help="Text description of target video")
     parser.add_argument("--video_path", type=str, required=True, help="Path to a source video")
     parser.add_argument("--output_path", type=str, default="./outputs", help="Directory of output")
-    parser.add_argument("--condition", type=str, default="depth", help="Condition of structure sequence")
+    parser.add_argument("--condition", type=str, default="depth_midas", help="Condition of structure sequence")
     parser.add_argument("--video_length", type=int, default=15, help="Length of synthesized video")
     parser.add_argument("--height", type=int, default=512, help="Height of synthesized video, and should be a multiple of 32")
     parser.add_argument("--width", type=int, default=512, help="Width of synthesized video, and should be a multiple of 32")
@@ -95,7 +95,7 @@ if __name__ == "__main__":
     
     tokenizer = CLIPTokenizer.from_pretrained(sd_path, subfolder="tokenizer")
     text_encoder = CLIPTextModel.from_pretrained(sd_path, subfolder="text_encoder").to(dtype=torch.float16)
-    vae = AutoencoderKL.from_pretrained(sd_path, subfolder="vae").to(dtype=torch.float16)
+    vae = AutoencoderKL.from_pretrained(sd_path, subfolder="vae",low_cpu_mem_usage=False, device_map=None).to(dtype=torch.float16)
     unet = UNet3DConditionModel.from_pretrained_2d(sd_path, subfolder="unet").to(dtype=torch.float16)
     controlnet = ControlNetModel3D.from_pretrained_2d(controlnet_dict[args.condition]).to(dtype=torch.float16)
     interpolater = IFNet(ckpt_path=inter_path).to(dtype=torch.float16)
@@ -104,6 +104,7 @@ if __name__ == "__main__":
     pipe = ControlVideoPipeline(
             vae=vae, text_encoder=text_encoder, tokenizer=tokenizer, unet=unet,
             controlnet=controlnet, interpolater=interpolater, scheduler=scheduler,
+            #low_cpu_mem_usage=False, device_map=None
         )
     pipe.enable_vae_slicing()
     pipe.enable_xformers_memory_efficient_attention()
