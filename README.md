@@ -26,6 +26,7 @@
 **Tune-a-video: One-shot Tuning of Image Diffusion Models for Text-to-Video Generation**  
 **Conference**: ICCV 2023  
 [GitHub Repository](https://github.com/showlab/Tune-A-Video)
+
 **Note**: Tune-A-Video는 **One-shot tuning**이 필요합니다.
 ---
 
