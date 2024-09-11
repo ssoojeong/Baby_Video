@@ -11,6 +11,7 @@
 **HiGen: Hierarchical Spatio-temporal Decoupling for Text-to-Video Generation**  
 **Conference**: CVPR 2024  
 [GitHub Repository](https://github.com/ali-vilab/VGen?tab=readme-ov-file)
+
 **사용법**
 1. 텍스트 프롬프트 입력:
     - `data/text_list_for_t2v_share.txt` 파일에서 입력할 수 있습니다.
