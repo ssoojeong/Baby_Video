@@ -1,9 +1,10 @@
 # Baby_Video
+---
 ## HiGen
 HiGen: Hierarchical Spatio-temporal Decoupling for Text-to-Video Generation (CVPR 2024)
 [GitHub Repository](https://github.com/ali-vilab/VGen?tab=readme-ov-file)
 
-**사용법**
+사용법
 1. 텍스트 프롬프트 입력:
     - `data/text_list_for_t2v_share.txt` 파일에서 입력할 수 있습니다.
 
@@ -15,17 +16,16 @@ HiGen: Hierarchical Spatio-temporal Decoupling for Text-to-Video Generation (CVP
 VMC: Video Motion Customization using Temporal Attention Adaption for Text-to-Video Diffusion Models (CVPR 2024)
 [GitHub Repository](https://github.com/HyeonHo99/Video-Motion-Customization)
 
-Note: 입력 영상 필요
-
-
-
+Note
+- 입력 영상 필요
 
 ---
 ## Tune-A-Video
 Tune-a-video: One-shot Tuning of Image Diffusion Models for Text-to-Video Generation (ICCV 2023)
 [GitHub Repository](https://github.com/showlab/Tune-A-Video)
 
-Note: One-shot tuning 필요
+Note
+- One-shot tuning 필요
 
 ---
 
