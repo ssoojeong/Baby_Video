@@ -1,0 +1,2 @@
+stable-diffusion-v1-4/unet/diffusion_pytorch_model.bin filter=lfs diff=lfs merge=lfs -text
+LaVie/lavie_base.pt filter=lfs diff=lfs merge=lfs -text
