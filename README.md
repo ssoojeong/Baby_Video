@@ -27,6 +27,7 @@
 **Conference**: ICCV 2023  
 [GitHub Repository](https://github.com/showlab/Tune-A-Video)
 
-**Note**: Tune-A-Video는 **One-shot tuning**이 필요합니다.
+**Note**
+Tune-A-Video는 One-shot tuning이 필요
 ---
 
