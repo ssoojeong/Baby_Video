@@ -61,11 +61,15 @@ def main(
 
     # Handle the output folder creation
     if accelerator.is_main_process:
-        now = datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
-        output_dir = os.path.join(output_dir, now)
+        # now = datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
+        # output_dir = os.path.join(output_dir, now)
+        # os.makedirs(output_dir, exist_ok=True)
+        # os.makedirs(f"{output_dir}/samples", exist_ok=True)
+        # OmegaConf.save(config, os.path.join(output_dir, 'config.yaml'))
+        
+        now = datetime.datetime.now().strftime("%Y-%m-%d")
+        output_dir = os.path.join(args.save_dir, now)
         os.makedirs(output_dir, exist_ok=True)
-        os.makedirs(f"{output_dir}/samples", exist_ok=True)
-        OmegaConf.save(config, os.path.join(output_dir, 'config.yaml'))
 
     # Load scheduler, tokenizer and models.
     tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer")
@@ -122,61 +126,73 @@ def main(
     generator = torch.Generator(device=unet.device)
     generator.manual_seed(seed)
 
-    samples = []
+    with open(args.my_prompt, "r") as f:
+        my_prompts = [line.strip() for line in f.readlines()]
+    
+    for num_idx in range(len(my_prompts)):
+        samples = []
+        prompt = [my_prompts[num_idx]]*5
+        # else:
+        #     prompt = list(validation_data.prompts)
+        negative_prompt = config['validation_data']['negative_prompt']
+        negative_prompt = [negative_prompt] * len(prompt)
 
-    prompt = list(validation_data.prompts)
-    negative_prompt = config['validation_data']['negative_prompt']
-    negative_prompt = [negative_prompt] * len(prompt)
+        with (torch.no_grad()):
+            x_base = validation_pipeline.prepare_latents(batch_size=1,
+                                                        num_channels_latents=4,
+                                                        video_length=len(prompt),
+                                                        height=512,
+                                                        width=512,
+                                                        dtype=weight_dtype,
+                                                        device=unet.device,
+                                                        generator=generator,
+                                                        store_attention=True,
+                                                        frame_same_noise=True)
 
-    with (torch.no_grad()):
-        x_base = validation_pipeline.prepare_latents(batch_size=1,
-                                                     num_channels_latents=4,
-                                                     video_length=len(prompt),
-                                                     height=512,
-                                                     width=512,
-                                                     dtype=weight_dtype,
-                                                     device=unet.device,
-                                                     generator=generator,
-                                                     store_attention=True,
-                                                     frame_same_noise=True)
+            x_res = validation_pipeline.prepare_latents(batch_size=1,
+                                                        num_channels_latents=4,
+                                                        video_length=len(prompt),
+                                                        height=512,
+                                                        width=512,
+                                                        dtype=weight_dtype,
+                                                        device=unet.device,
+                                                        generator=generator,
+                                                        store_attention=True,
+                                                        frame_same_noise=False)
 
-        x_res = validation_pipeline.prepare_latents(batch_size=1,
-                                                    num_channels_latents=4,
-                                                    video_length=len(prompt),
-                                                    height=512,
-                                                    width=512,
-                                                    dtype=weight_dtype,
-                                                    device=unet.device,
-                                                    generator=generator,
-                                                    store_attention=True,
-                                                    frame_same_noise=False)
+            x_T = np.cos(inference_config['diversity_rand_ratio'] * np.pi / 2) * x_base + np.sin(
+                inference_config['diversity_rand_ratio'] * np.pi / 2) * x_res
 
-        x_T = np.cos(inference_config['diversity_rand_ratio'] * np.pi / 2) * x_base + np.sin(
-            inference_config['diversity_rand_ratio'] * np.pi / 2) * x_res
+            #validation_data.pop('negative_prompt')
+            # key frame
+            key_frames, text_embedding = validation_pipeline(prompt, video_length=len(prompt), generator=generator,
+                                                            latents=x_T.type(weight_dtype),
+                                                            negative_prompt=negative_prompt,
+                                                            output_dir=output_dir,
+                                                            return_text_embedding=True,
+                                                            #**validation_data
+                                                            )
+            torch.cuda.empty_cache()
 
-        validation_data.pop('negative_prompt')
-        # key frame
-        key_frames, text_embedding = validation_pipeline(prompt, video_length=len(prompt), generator=generator,
-                                                         latents=x_T.type(weight_dtype),
-                                                         negative_prompt=negative_prompt,
-                                                         output_dir=output_dir,
-                                                         return_text_embedding=True,
-                                                         **validation_data)
-        torch.cuda.empty_cache()
-
-        samples.append(key_frames[0])
-    samples = torch.concat(samples)
-    save_path = f"{output_dir}/samples/sample.gif"
-    save_videos_grid(samples, save_path, n_rows=6)
-    save_videos_per_frames_grid(samples, f'{output_dir}/img_samples', n_rows=6)
-    logger.info(f"Saved samples to {save_path}")
+            samples.append(key_frames[0])
+        samples = torch.concat(samples)
+        # save_path = f"{output_dir}/samples/sample.gif"
+        save_path = f"{output_dir}/{num_idx}_sample.gif"
+        save_videos_grid(samples, save_path, n_rows=6)
+        #save_videos_per_frames_grid(samples, f'{output_dir}/img_samples', n_rows=6)
+        logger.info(f"Saved samples to {save_path}")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--config", type=str, default="./configs/flowers.yaml")
+    parser.add_argument("--my_prompt", type=str, default=None)
+    parser.add_argument("--save_dir", type=str, default=None)
     args = parser.parse_args()
 
     conf = OmegaConf.load(args.config)
+    
+    with open(args.my_prompt, "r") as f:
+        my_prompts = [line.strip() for line in f.readlines()]
     main(**conf)
