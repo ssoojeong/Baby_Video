@@ -5,9 +5,7 @@ You can run the inference code for each model from the following notebook:
 
 - **Notebook Path:** `./inference_code/inference.ipynb`
 
-This notebook is configured to support running inference for various models. 
-
-Simply select the desired model and execute the respective cells to generate results.
+This notebook is configured to support running inference for comparison models. 
 
 
 # Project Report: 240916
