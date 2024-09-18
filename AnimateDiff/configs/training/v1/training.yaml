@@ -1,7 +1,7 @@
 image_finetune: false
 
 output_dir: "outputs"
-pretrained_model_path: "models/StableDiffusion/stable-diffusion-v1-5"
+pretrained_model_path: "models/StableDiffusion/stable-diffusion-v1-4"
 
 unet_additional_kwargs:
   use_motion_module              : true
@@ -28,8 +28,8 @@ noise_scheduler_kwargs:
   clip_sample:         false
 
 train_data:
-  csv_path:        "path_to_csv_file"
-  video_folder:    "path_to_video_foler"
+  csv_path:        "/userHome/userhome4/demo/baby_video/Baby_Video/AnimateDiff/dataset/valid_dataset.csv"
+  video_folder:    "/userHome/userhome4/demo/baby_video/Baby_Video/AnimateDiff/dataset/webvid"
   sample_size:     256
   sample_stride:   4
   sample_n_frames: 16
