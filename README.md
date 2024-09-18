@@ -7,7 +7,11 @@ You can run the inference code for each model from the following notebook:
 
 This notebook is configured to support running inference for comparison models. 
 
+## 2. Results
 
+You can see the results of the inference for each model from the following notebook:
+
+- **Notebook Path:** `./inference_outputs/{model_name}`
 
 
 # Project Report: 240916
