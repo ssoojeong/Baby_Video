@@ -1,11 +1,11 @@
 # path:
 ckpt_path: "../pretrained_models/lavie_base.pt"
-output_folder: "../res/base/"
+output_folder: "../res/base/watercolor video"
 pretrained_path: "../pretrained_models"
 
 # model config: 
 model: UNet
-video_length: 16
+video_length: 32
 image_size: [320, 512]
 
 # beta schedule
@@ -33,5 +33,10 @@ num_sampling_steps: 50
 #        ] 
 
 text_prompt: [
-       "A video of a duckling wearing a medieval soldier helmet and riding a skateboard for children song",
+       "generate a watercolor video depicting the following lyrics Welcome to the forest cave.",
+       "generate a watercolor video depicting the following lyrics Beware of the dinosaurs that live here.",
+       "generate a watercolor video depicting the following lyrics The scariest animal on earth today.",
+       "generate a watercolor video depicting the following lyrics I feel like a Tyrannosaurus will appear out of nowhere.",
+       "generate a watercolor video depicting the following lyrics But don't worry.",
+       "generate a watercolor video depicting the following lyrics Brachiosaurus will appear and help Tyranno.",
 ]
