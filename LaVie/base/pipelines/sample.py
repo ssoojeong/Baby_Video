@@ -16,7 +16,7 @@ sys.path.append(os.path.split(sys.path[0])[0])
 from models import get_models
 import imageio
 
-def main(args):
+def main(args, prompts="", output_dir="", style=""):
 	if args.seed is not None:
 		torch.manual_seed(args.seed)
 	torch.set_grad_enabled(False)
@@ -63,12 +63,30 @@ def main(args):
 								 scheduler=scheduler, 
 								 unet=unet).to(device)
 	videogen_pipeline.enable_xformers_memory_efficient_attention()
+ 
+	if output_dir == "":
+		output_folder = args.output_folder
+	else:
+		output_folder = output_dir
 
-	if not os.path.exists(args.output_folder):
-		os.makedirs(args.output_folder)
+	if not os.path.exists(output_folder):
+		os.makedirs(output_folder)
 
 	video_grids = []
-	for prompt in args.text_prompt:
+	if prompts == "":
+		prompts = args.text_prompt
+		
+	# 프롬프트 전처리 (line by line)
+	if prompts.__contains__("\n"):
+		prompts = [i.strip() for i in prompts.split(".")]
+	else:
+		if type(prompts) == str:
+			prompts = list(prompts)
+ 
+	print("output_folder : ", output_folder)
+	print("style : ", style)
+	for prompt in prompts:
+		prompt = style + " " +prompt
 		print('Processing the ({}) prompt'.format(prompt))
 		videos = videogen_pipeline(prompt, 
 								video_length=args.video_length, 
@@ -76,14 +94,18 @@ def main(args):
 								width=args.image_size[1], 
 								num_inference_steps=args.num_sampling_steps,
 								guidance_scale=args.guidance_scale).video
-		imageio.mimwrite(args.output_folder + prompt.replace(' ', '_') + '.mp4', videos[0], fps=8, quality=9) # highest quality is 10, lowest is 0
+		imageio.mimwrite(output_folder + prompt.replace(' ', '_') + '.mp4', videos[0], fps=8, quality=9) # highest quality is 10, lowest is 0
 	
-	print('save path {}'.format(args.output_folder))
+	print('save path {}'.format(output_folder))
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--config", type=str, default="")
+	parser.add_argument("--prompts", type=str, default="")
+	parser.add_argument("--output_dir", type=str, default="")
+	parser.add_argument("--style", type=str, default="")
 	args = parser.parse_args()
 
-	main(OmegaConf.load(args.config))
+	main(OmegaConf.load(args.config), args.prompts, args.output_dir, args.style)
+
 

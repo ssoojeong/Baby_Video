@@ -8,10 +8,7 @@ conda env create -f environment.yml
 conda activate lavie
 ```
 
-`cd base`
-
-base/configs/sample.yaml에서 text prompt 수정 후
-`python pipelines/sample.py --config configs/sample.yaml`
+run `inference_lavie.ipynb`
 
 
 ## StyleCrafter
