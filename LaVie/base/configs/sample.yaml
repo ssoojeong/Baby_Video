@@ -23,14 +23,6 @@ run_time: 0
 guidance_scale: 7.5
 sample_method: 'ddpm'
 num_sampling_steps: 50
-# text_prompt: [
-#               'a teddy bear walking on the street, 2k, high quality',
-#               'a panda taking a selfie, 2k, high quality',
-#               'a polar bear playing drum kit in NYC Times Square, 4k, high resolution',
-#               'jungle river at sunset, ultra quality',
-#               'a shark swimming in clear Carribean ocean, 2k, high quality',
-#               'a Corgi walking in the park at sunrise, oil painting style'
-#        ] 
 
 text_prompt: [
        "generate a watercolor video depicting the following lyrics Welcome to the forest cave.",
