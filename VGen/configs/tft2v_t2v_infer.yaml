@@ -14,7 +14,8 @@ round: 1
 seed: 888
 test_list_path: data/text_list_for_tft2v.txt
 vldm_cfg: configs/t2v_train.yaml
-positive_prompt: ', cinematic, High Contrast, highly detailed, no blur, 4k render'
+# positive_prompt: ', cinematic, High Contrast, highly detailed, no blur, 4k render'
+positive_prompt: ', cartoon video, no blur, 4k render'
 # test_model: workspace/model_bk/model_scope_0267000.pth
 test_model: models/tft2v_t2v_non_ema_512000.pth
 embedder: {
