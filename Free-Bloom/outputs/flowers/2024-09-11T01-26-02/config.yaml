@@ -1,0 +1,34 @@
+pretrained_model_path: models/stable-diffusion-v1-4
+output_dir: ./outputs/flowers
+validation_data:
+  prompts:
+  - A group of closed buds can be seen on the stem of a plant.
+  - The buds begin to slowly unfurl, revealing small petals.
+  - ' The petals continue to unfurl, revealing more of the flower''s center.'
+  - The petals are now fully opened, and the center of the flower is visible.
+  - The flower's stamen and pistil become more prominent, and the petals start to
+    curve outward.
+  - The fully bloomed flowers are in full view, with their petals open wide and displaying
+    their vibrant colors.
+  width: 512
+  height: 512
+  num_inference_steps: 50
+  guidance_scale: 12.5
+  use_inv_latent: true
+  num_inv_steps: 50
+  negative_prompt: longbody, lowres, bad anatomy, bad hands, missing fingers, extra
+    digit, fewer difits, cropped, worst quality, low quality, deformed body, bloated,
+    ugly, unrealistic
+  interpolate_k: 0
+  attention_type_former:
+  - self
+  - first
+  - former
+  attention_type_latter:
+  - self
+  attention_adapt_step: 20
+mixed_precision: fp16
+enable_xformers_memory_efficient_attention: true
+seed: 42
+inference_config:
+  diversity_rand_ratio: 0.1
