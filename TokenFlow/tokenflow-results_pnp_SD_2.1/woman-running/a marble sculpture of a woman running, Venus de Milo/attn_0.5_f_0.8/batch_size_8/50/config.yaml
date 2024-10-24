@@ -1,0 +1,16 @@
+batch_size: 8
+data_path: data/woman-running
+device: cuda
+guidance_scale: 7.5
+latents_path: save
+n_frames: 40
+n_inversion_steps: 500
+n_timesteps: 50
+negative_prompt: ugly, blurry, low res, unrealistic, unaesthetic
+output_path: tokenflow-results_pnp_SD_2.1/woman-running/a marble sculpture of a woman
+  running, Venus de Milo/attn_0.5_f_0.8/batch_size_8/50
+pnp_attn_t: 0.5
+pnp_f_t: 0.8
+prompt: a marble sculpture of a woman running, Venus de Milo
+sd_version: '2.1'
+seed: 1
